@@ -2,6 +2,8 @@
 
 A Maven plug-in that helps you develop Java plug-ins for VMware vRealize Orchestrator by automatically installing the compiled *.vmoapp or *.dar files on the configured vRealize Orchestrator server.
 
+**Note: due to the lack of a API endpoint to restart the orchestration service you will still have to restart it manually e.g. using *service vco-server restart*.** You may further automate the deployment by executing a *SSH* command to do the job once the build was successfull.
+
 ## Usage
 This Mojo should be configured within your *o11nplugin-**pluginname**/pom.xml* Maven module. It has a single goal **deployplugin** and usually you should run it in the **install** phase. The **deployplugin** goal has the following parameters:
 

@@ -1,0 +1,11 @@
+/target
+/.settings
+.project
+.classpath
+*.class
+*.jar
+*.war
+*.ear
+*.dar
+*.vmoapp
+Thumbs.db
