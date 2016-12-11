@@ -24,19 +24,146 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.vratpack</groupId>
+	<groupId>com.github.m451</groupId>
 	<artifactId>o11n-deploy-maven-plugin</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.2</version>
 	<packaging>maven-plugin</packaging>
-	<name>o11n-deploy-maven-plugin Maven Plugin</name>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>A Maven plug-in that helps you develop Java plug-ins for VMware vRealize Orchestrator by automatically installing the compiled *.vmoapp or *.dar files on the configured vRealize Orchestrator server.</description>
 	<url>https://github.com/m451/o11n-deploy-maven-plugin</url>
 
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3, 29 June 2007</name>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Robert Szymczak</name>
+			<email>m451@outlook.com</email>
+		</developer>
+	</developers>
 	<scm>
-		<connection>scm:git:https://github.com/m451/o11n-deploy-maven-plugin</connection>
+		<connection>scm:git:git://github.com/m451/o11n-deploy-maven-plugin.git</connection>
+		<developerConnection>scm:git:ssh://github.com/m451/o11n-deploy-maven-plugin.git</developerConnection>
 		<url>https://github.com/m451/o11n-deploy-maven-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
-
+	
+	<profiles>
+		<!-- This profile is used in development. It is active by default.
+			run 'mvn install -P dev' for forced profile activation. -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
+			</build>
+		</profile>
+		<!-- This profile is used when deploying a new plugin version to Sonatype OSSRH
+			run 'mvn clean deploy -P ossrh' for profile activation. You will need 
+			to specify additional parameters when using this profile, see below. -->
+		<profile>
+			<!-- NOTE In order to perform a release deployment you have to edit your 
+				version in all your POM files to use release versions. This means that 
+				they can not end in -SNAPSHOT In addition plugin and dependency 
+				declarations can also not use snapshot versions. -->
+			<!-- NOTE make sure you configure the OSSRH server with username and 
+				password before running this profile as mentioned in the sonatype 
+				OSSRH guide at http://central.sonatype.org/pages/ossrh-guide.html -->
+			<id>ossrh</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<!-- Sonatype OSSRH deployment -->
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<finalName>${project.artifactId}-${project.version}</finalName>
+				<plugins>
+					<!-- Sonatype OSSRH deployment -->
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<!-- Quote: "With the property autoReleaseAfterClose set to false you can manually 
+								inspect the staging repository in the Nexus Repository Manager and trigger 
+								a release of the staging repository later with 'mvn nexus-staging:release'.
+								If you find something went wrong you can drop the staging repository with
+								'mvn nexus-staging:drop'." You can release / drop using the sonatype 
+								UI as well at https://oss.sonatype.org/#stagingRepositories -->
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+					<!-- JavaSources requirement for Sonatype OSSRH deployment -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- JavaDoc requirement for Sonatype OSSRH deployment -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- GPG signing requirement for Sonatype OSSRH deployment 
+						NOTE that you have to specify the gpg.passphrase param 
+						within your settings.xml before running this profile. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- Use fingerprint instead of short / long key id due to possible collision attacks -->
+							<keyname>8C1076FE7622DB407B65C3C58E5956631272A74A</keyname>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -83,7 +210,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
 		<plugins>
 			<!-- automate build number increment for easier development -->
 			<plugin>
@@ -92,8 +218,7 @@
 				<version>1.4</version>
 				<configuration>
 					<doCheck>false</doCheck>
-					<doUpdate>
-	false</doUpdate>
+					<doUpdate>false</doUpdate>
 				</configuration>
 				<executions>
 					<!-- Use shorted git revision id for production packages -->
@@ -158,4 +283,32 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<releases>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<name>Maven Plugin Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<releases>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
