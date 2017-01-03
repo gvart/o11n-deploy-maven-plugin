@@ -20,7 +20,7 @@ A Maven plug-in that helps you develop Java plug-ins for VMware vRealize Orchest
 	<dependency>
 	    <groupId>com.github.gvart</groupId>
 	    <artifactId>o11n-deploy-maven-plugin</artifactId>
-	    <version>0.1.3</version>
+	    <version>0.1.2-alpha</version>
 	</dependency>
 ```
 
@@ -47,7 +47,7 @@ A example that uses all currently available parameters.
 <plugin>
 	<groupId>com.github.gvart</groupId>
 	<artifactId>o11n-deploy-maven-plugin</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.2-alpha</version>
 	<executions>
 		<execution>
 			<phase>install</phase>
@@ -73,12 +73,14 @@ A example that uses all currently available parameters.
 
 ### Example execution
  
- An example output of a successfull run may look like this:
+ An example output of a successfully run may look like this:
 ```bash
-[INFO] --- o11n-deploy-maven-plugin:0.1.1:deployplugin (default) @ o11nplugin-coopto ---
-[INFO] Configured plugin: 'D:\workspace\coopto\o11nplugin-coopto\target\o11nplugin-coopto-0.0.3-dev.vmoapp'.
-[INFO] Configured server: 'https://localhost:8281/vco/api/plugins'.
-[INFO] HTTP 204. Successfully updated plug-in in VMware Orchestrator!
+[INFO] --- o11n-deploy-maven-plugin:0.1.2-alpha:deployplugin (default) @ o11nplugin-SIEM ---
+[INFO] Configured plugin: '/home/pika/workspace/git/siem/o11nplugin-SIEM/target/o11nplugin-SIEM-1.0.0.vmoapp'.
+[INFO] Configured server: 'https://172.28.36.143:8281/vco/api/plugins'.
+[INFO] START DELETING!
+[INFO] HTTP 200. Successfully deleted package in VMware Orchestrator.
+[INFO] HTTP 204. Successfully updated plug-in in VMware Orchestrator.
 ```
 
 
