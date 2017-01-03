@@ -9,3 +9,6 @@
 *.dar
 *.vmoapp
 Thumbs.db
+/.idea
+o11n-deploy-maven-plugin.iml
+workspace.xml

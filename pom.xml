@@ -24,13 +24,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.m451</groupId>
+	<groupId>com.github.gvart</groupId>
 	<artifactId>o11n-deploy-maven-plugin</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.2-alpha</version>
 	<packaging>maven-plugin</packaging>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A Maven plug-in that helps you develop Java plug-ins for VMware vRealize Orchestrator by automatically installing the compiled *.vmoapp or *.dar files on the configured vRealize Orchestrator server.</description>
-	<url>https://github.com/m451/o11n-deploy-maven-plugin</url>
+	<url>https://github.com/gvart/o11n-deploy-maven-plugin</url>
 
 	<licenses>
 		<license>
@@ -45,12 +45,12 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git://github.com/m451/o11n-deploy-maven-plugin.git</connection>
-		<developerConnection>scm:git:ssh://github.com/m451/o11n-deploy-maven-plugin.git</developerConnection>
-		<url>https://github.com/m451/o11n-deploy-maven-plugin</url>
+		<connection>scm:git:git://github.com/gvart/o11n-deploy-maven-plugin.git</connection>
+		<developerConnection>scm:git:ssh://github.com/gvart/o11n-deploy-maven-plugin.git</developerConnection>
+		<url>https://github.com/gvart/o11n-deploy-maven-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<profiles>
 		<!-- This profile is used in development. It is active by default.
 			run 'mvn install -P dev' for forced profile activation. -->

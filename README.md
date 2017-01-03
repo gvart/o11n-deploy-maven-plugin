@@ -6,24 +6,23 @@ A Maven plug-in that helps you develop Java plug-ins for VMware vRealize Orchest
 
 
 ## Install
-You may download this Mojo as a binary and add it to your local Maven repository for usage. In addition this Mojo is available in the public OSSRH repository hosted by Sonatype and will automatically be pulled from there when added to your project's Maven POM.
-If you have not yet added the Sonatype OSSRH you can do so by adding the following to your POM.
 
+1.Add Repository
 ```xml
-<repositories>
-	<repository>
-		<id>sonatype-oss-public</id>
-		<url>https://oss.sonatype.org/content/groups/public/</url>
-		<releases>
-			<enabled>true</enabled>
-		</releases>
-		<snapshots>
-			<enabled>true</enabled>
-		</snapshots>
-	</repository>
-</repositories>
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
 ```
 
+2.Add dependency
+```xml
+	<dependency>
+	    <groupId>com.github.gvart</groupId>
+	    <artifactId>o11n-deploy-maven-plugin</artifactId>
+	    <version>0.1.3</version>
+	</dependency>
+```
 
 ## Usage
 This Mojo should be configured within your *o11nplugin-**pluginname**/pom.xml* Maven module. It has a single goal **deployplugin** and usually you should run it in the **install** phase. The **deployplugin** goal has the following parameters:
@@ -36,6 +35,7 @@ This Mojo should be configured within your *o11nplugin-**pluginname**/pom.xml* M
 - **o11nPluginType**: Either 'vmoapp' or 'dar' depending on the plug-in format. Defaults to *vmoapp*.
 - **o11nPluginFilePath**: Path to the plugin *.vmoapp or *.dar that should be installed. Defaults to *${project.build.directory}*.
 - **o11nPluginFileName**: Filename without file extension of the plugin that should be installed. Defaults to *${project.build.finalName}*.
+- **o11nDeletePackage**: Default value is 'false' in case that is set to 'true' package and all related elements( workflows, actions ) will be deleted before installing
 
 All parameters are provided as Strings and converted into the required format internally. A simple `mvn install` will then trigger the upload of the compiled plugin.
 
@@ -45,7 +45,7 @@ A example that uses all currently available parameters.
 
 ```xml
 <plugin>
-	<groupId>com.github.m451</groupId>
+	<groupId>com.github.gvart</groupId>
 	<artifactId>o11n-deploy-maven-plugin</artifactId>
 	<version>0.1.2</version>
 	<executions>
@@ -62,24 +62,12 @@ A example that uses all currently available parameters.
 		<o11nUser>vcoadmin</o11nUser>
 		<o11nPassword>vcoadmin</o11nPassword>
 		<o11nOverwrite>true</o11nOverwrite>
+		<o11nDeletePackage>true</o11nDeletePackage>
 		<o11nPluginType>vmoapp</o11nPluginType>
 		<o11nPluginFilePath>${project.build.directory}</o11nPluginFilePath>
 		<o11nPluginFileName>${project.build.finalName}</o11nPluginFileName>
 	</configuration>
 </plugin>
-<!-- Optional, see 'install' section of this readme -->
-<repositories>
-	<repository>
-		<id>sonatype-oss-public</id>
-		<url>https://oss.sonatype.org/content/groups/public/</url>
-		<releases>
-			<enabled>true</enabled>
-		</releases>
-		<snapshots>
-			<enabled>true</enabled>
-		</snapshots>
-	</repository>
-</repositories>
 ```
 
 
